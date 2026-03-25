@@ -1,3 +1,16 @@
 spring:
   application:
     name: interdimensional-bazaar
+
+  datasource:
+    # TODO: Disable `allowPublicKeyRetrieval` in production
+    url: jdbc:mysql://localhost:3306/bazaar_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    # TODO: Change username and password to correct values
+    username: bazaar_user
+    password: password123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
