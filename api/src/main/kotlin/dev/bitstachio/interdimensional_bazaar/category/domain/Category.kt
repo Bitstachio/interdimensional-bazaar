@@ -1,4 +1,4 @@
-package dev.bitstachio.interdimensional_bazaar.user.domain
+package dev.bitstachio.interdimensional_bazaar.category.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -10,19 +10,17 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "users")
-class User(
+@Table(name = "categories")
+class Category(
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	var id: UUID? = null,
-	@Column(name = "first_name")
-	var firstName: String? = null,
-	@Column(name = "last_name")
-	var lastName: String? = null,
 	@Column(nullable = false, unique = true)
-	var email: String = "",
-	@Column(name = "password_hash", nullable = false)
-	var passwordHash: String = "",
+	var name: String = "",
+	@Column(nullable = false, unique = true)
+	var slug: String = "",
+	@Column(columnDefinition = "TEXT")
+	var description: String? = null,
 	@Column(name = "created_at", nullable = false, updatable = false)
 	var createdAt: LocalDateTime = LocalDateTime.now(),
 )
