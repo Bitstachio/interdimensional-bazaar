@@ -6,7 +6,7 @@ import java.util.UUID
 
 data class CartResponse(
 	val id: UUID,
-	val userId: UUID,
+	val userId: UUID?,
 	val createdAt: LocalDateTime,
 	val items: List<CartLineResponse>,
 	val subtotal: BigDecimal,

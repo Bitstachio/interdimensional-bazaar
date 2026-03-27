@@ -25,9 +25,17 @@ class ProductServiceImpl(
 ) : ProductService {
 
     @Transactional(readOnly = true)
-    override fun list(categoryId: UUID?, activeOnly: Boolean, pageable: Pageable): Page<ProductResponse> {
+    override fun list(
+        categoryId: UUID?,
+        activeOnly: Boolean,
+        search: String?,
+        pageable: Pageable,
+    ): Page<ProductResponse> {
+        val normalizedSearch = search?.trim()?.takeIf { it.isNotEmpty() }
         val page =
-            if (categoryId != null) {
+            if (normalizedSearch != null) {
+                productRepository.searchProducts(categoryId, activeOnly, normalizedSearch, pageable)
+            } else if (categoryId != null) {
                 productRepository.findByCategoryIdAndIsActive(categoryId, activeOnly, pageable)
             } else {
                 productRepository.findByIsActive(activeOnly, pageable)

@@ -22,8 +22,8 @@ class Cart(
 	@GeneratedValue(strategy = GenerationType.UUID)
 	var id: UUID? = null,
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false, unique = true)
-	var user: User,
+	@JoinColumn(name = "user_id", nullable = true, unique = true)
+	var user: User? = null,
 	@Column(name = "created_at", nullable = false, updatable = false)
 	var createdAt: LocalDateTime = LocalDateTime.now(),
 	@OneToMany(mappedBy = "cart", cascade = [CascadeType.ALL], orphanRemoval = true)

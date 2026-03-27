@@ -27,10 +27,11 @@ class ProductController(private val productService: ProductService) {
 	fun list(
 		@RequestParam(required = false) categoryId: UUID?,
 		@RequestParam(defaultValue = "true") activeOnly: Boolean,
+		@RequestParam(required = false) search: String?,
 		@PageableDefault(size = 20, sort = ["createdAt"], direction = Sort.Direction.DESC)
 		pageable: Pageable,
 	): Page<ProductResponse> {
-		return productService.list(categoryId, activeOnly, pageable)
+		return productService.list(categoryId, activeOnly, search, pageable)
 	}
 
 	@GetMapping("/{id}")

@@ -47,4 +47,39 @@ class CartController(private val cartService: CartService) {
 	): CartResponse {
 		return cartService.removeItem(userId, itemId)
 	}
+
+	@PostMapping("/guest")
+	fun createGuestCart(): CartResponse {
+		return cartService.createGuestCart()
+	}
+
+	@GetMapping("/{cartId}")
+	fun getCartById(@PathVariable cartId: UUID): CartResponse {
+		return cartService.getCartById(cartId)
+	}
+
+	@PostMapping("/{cartId}/items")
+	fun addItemByCartId(
+		@PathVariable cartId: UUID,
+		@RequestBody request: AddCartItemRequest,
+	): CartResponse {
+		return cartService.addItemByCartId(cartId, request)
+	}
+
+	@PutMapping("/{cartId}/items/{itemId}")
+	fun updateItemByCartId(
+		@PathVariable cartId: UUID,
+		@PathVariable itemId: Long,
+		@RequestBody request: UpdateCartItemRequest,
+	): CartResponse {
+		return cartService.updateItemByCartId(cartId, itemId, request)
+	}
+
+	@DeleteMapping("/{cartId}/items/{itemId}")
+	fun removeItemByCartId(
+		@PathVariable cartId: UUID,
+		@PathVariable itemId: Long,
+	): CartResponse {
+		return cartService.removeItemByCartId(cartId, itemId)
+	}
 }

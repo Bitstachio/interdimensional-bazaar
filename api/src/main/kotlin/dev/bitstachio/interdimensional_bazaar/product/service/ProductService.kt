@@ -8,7 +8,12 @@ import org.springframework.data.domain.Pageable
 import java.util.UUID
 
 interface ProductService {
-	fun list(categoryId: UUID?, activeOnly: Boolean, pageable: Pageable): Page<ProductResponse>
+	fun list(
+		categoryId: UUID?,
+		activeOnly: Boolean,
+		search: String?,
+		pageable: Pageable,
+	): Page<ProductResponse>
 
 	fun getById(id: UUID): ProductResponse
 

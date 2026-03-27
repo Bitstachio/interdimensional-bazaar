@@ -13,4 +13,14 @@ interface CartService {
 	fun updateItem(userId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse
 
 	fun removeItem(userId: UUID, itemId: Long): CartResponse
+
+	fun createGuestCart(): CartResponse
+
+	fun getCartById(cartId: UUID): CartResponse
+
+	fun addItemByCartId(cartId: UUID, request: AddCartItemRequest): CartResponse
+
+	fun updateItemByCartId(cartId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse
+
+	fun removeItemByCartId(cartId: UUID, itemId: Long): CartResponse
 }

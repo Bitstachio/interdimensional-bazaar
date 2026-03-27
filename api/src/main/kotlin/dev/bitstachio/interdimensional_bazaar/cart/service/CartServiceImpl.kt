@@ -33,13 +33,87 @@ class CartServiceImpl(
 ) : CartService {
 
 	override fun getCart(userId: UUID): CartResponse {
-		val cart = getOrCreateCart(userId)
+		val cart = getOrCreateCartForUser(userId)
 		return toCartResponse(cart)
 	}
 
 	override fun addItem(userId: UUID, request: AddCartItemRequest): CartResponse {
+		val cart = getOrCreateCartForUser(userId)
+		addItemToCart(cart, request)
+		return toCartResponse(reloadCart(cart.id!!))
+	}
+
+	override fun updateItem(userId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse {
+		val cart =
+			cartRepository.findByUser_Id(userId).orElseThrow {
+				CartNotFoundException("Cart not found for user: $userId")
+			}
+		updateItemInCart(cart, itemId, request)
+		return toCartResponse(reloadCart(cart.id!!))
+	}
+
+	override fun removeItem(userId: UUID, itemId: Long): CartResponse {
+		val cart =
+			cartRepository.findByUser_Id(userId).orElseThrow {
+				CartNotFoundException("Cart not found for user: $userId")
+			}
+		removeItemFromCart(cart, itemId)
+		return toCartResponse(reloadCart(cart.id!!))
+	}
+
+	override fun createGuestCart(): CartResponse {
+		val cart = cartRepository.save(Cart(user = null))
+		return toCartResponse(cart)
+	}
+
+	override fun getCartById(cartId: UUID): CartResponse {
+		val cart =
+			cartRepository.findById(cartId).orElseThrow {
+				CartNotFoundException("Cart not found: $cartId")
+			}
+		return toCartResponse(cart)
+	}
+
+	override fun addItemByCartId(cartId: UUID, request: AddCartItemRequest): CartResponse {
+		val cart =
+			cartRepository.findById(cartId).orElseThrow {
+				CartNotFoundException("Cart not found: $cartId")
+			}
+		addItemToCart(cart, request)
+		return toCartResponse(reloadCart(cartId))
+	}
+
+	override fun updateItemByCartId(cartId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse {
+		val cart =
+			cartRepository.findById(cartId).orElseThrow {
+				CartNotFoundException("Cart not found: $cartId")
+			}
+		updateItemInCart(cart, itemId, request)
+		return toCartResponse(reloadCart(cartId))
+	}
+
+	override fun removeItemByCartId(cartId: UUID, itemId: Long): CartResponse {
+		val cart =
+			cartRepository.findById(cartId).orElseThrow {
+				CartNotFoundException("Cart not found: $cartId")
+			}
+		removeItemFromCart(cart, itemId)
+		return toCartResponse(reloadCart(cartId))
+	}
+
+	private fun getOrCreateCartForUser(userId: UUID): Cart {
+		val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
+		return cartRepository.findByUser_Id(userId).orElseGet {
+			cartRepository.save(Cart(user = user))
+		}
+	}
+
+	private fun reloadCart(cartId: UUID): Cart {
+		return cartRepository.findById(cartId).orElseThrow()
+	}
+
+	private fun addItemToCart(cart: Cart, request: AddCartItemRequest) {
 		requireQuantity(request.quantity)
-		val cart = getOrCreateCart(userId)
 		val product =
 			productRepository.findById(request.productId).orElseThrow {
 				ProductNotFoundException(request.productId)
@@ -58,13 +132,10 @@ class CartServiceImpl(
 			cart.items.add(line)
 		}
 		cartRepository.save(cart)
-		return toCartResponse(cartRepository.findById(cartId).orElseThrow())
 	}
 
-	override fun updateItem(userId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse {
+	private fun updateItemInCart(cart: Cart, itemId: Long, request: UpdateCartItemRequest) {
 		requireQuantity(request.quantity)
-		val cart =
-			cartRepository.findByUser_Id(userId).orElseThrow { CartNotFoundException(userId) }
 		val item =
 			cartItemRepository.findByIdAndCart_Id(itemId, cart.id!!).orElseThrow {
 				CartItemNotFoundException(itemId)
@@ -74,26 +145,15 @@ class CartServiceImpl(
 		ensureStock(product, request.quantity)
 		item.quantity = request.quantity
 		cartRepository.save(cart)
-		return toCartResponse(cartRepository.findById(cart.id!!).orElseThrow())
 	}
 
-	override fun removeItem(userId: UUID, itemId: Long): CartResponse {
-		val cart =
-			cartRepository.findByUser_Id(userId).orElseThrow { CartNotFoundException(userId) }
+	private fun removeItemFromCart(cart: Cart, itemId: Long) {
 		val item =
 			cartItemRepository.findByIdAndCart_Id(itemId, cart.id!!).orElseThrow {
 				CartItemNotFoundException(itemId)
 			}
 		cart.items.remove(item)
 		cartRepository.save(cart)
-		return toCartResponse(cartRepository.findById(cart.id!!).orElseThrow())
-	}
-
-	private fun getOrCreateCart(userId: UUID): Cart {
-		val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
-		return cartRepository.findByUser_Id(userId).orElseGet {
-			cartRepository.save(Cart(user = user))
-		}
 	}
 
 	private fun requireQuantity(quantity: Int) {
@@ -134,7 +194,7 @@ class CartServiceImpl(
 			lines.fold(BigDecimal.ZERO) { acc, line -> acc.add(line.lineTotal) }
 		return CartResponse(
 			id = cart.id!!,
-			userId = cart.user.id!!,
+			userId = cart.user?.id,
 			createdAt = cart.createdAt,
 			items = lines,
 			subtotal = subtotal,
