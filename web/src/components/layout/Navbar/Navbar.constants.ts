@@ -1,7 +1,7 @@
 import { ROUTES } from "@/lib/constants/routes";
-import { TNavLink } from "./Navbar.types";
+import { NavLink } from "./Navbar.types";
 
-export const NAV_LINKS: TNavLink[] = [
+export const NAV_LINKS: NavLink[] = [
   {
     id: "home",
     href: ROUTES.HOME,

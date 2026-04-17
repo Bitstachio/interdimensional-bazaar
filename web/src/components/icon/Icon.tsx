@@ -1,3 +1,6 @@
+"use client";
+
+import { cn } from "@/lib/utils/cn";
 import { ICONS } from "./registry";
 import { IconName } from "./types";
 
@@ -8,5 +11,5 @@ type IconProps = {
 
 export const Icon = ({ name, className }: IconProps) => {
   const Svg = ICONS[name].svg;
-  return <Svg className={className} name={name} />;
+  return <Svg className={cn("h-5 w-5", className)} />;
 };

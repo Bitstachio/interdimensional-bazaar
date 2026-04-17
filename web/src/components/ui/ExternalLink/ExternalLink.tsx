@@ -1,16 +1,14 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils/cn";
 import { ReactNode } from "react";
 
-type TExternalLinkProps = {
+type ExternalLinkProps = {
   href: string;
   italicize?: boolean;
   children: ReactNode;
 };
 
-const ExternalLink = ({ href, italicize, children }: TExternalLinkProps) => (
-  <a className={clsx("app-text-link", { italic: italicize })} href={href} target="_blank">
+export const ExternalLink = ({ href, italicize, children }: ExternalLinkProps) => (
+  <a className={cn("app-text-link", { italic: italicize })} href={href} target="_blank">
     {children}
   </a>
 );
-
-export default ExternalLink;
