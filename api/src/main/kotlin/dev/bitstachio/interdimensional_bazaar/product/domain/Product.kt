@@ -10,9 +10,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import jakarta.persistence.Convert
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Entity
 @Table(name = "products")
@@ -41,4 +43,27 @@ class Product(
 	var createdAt: LocalDateTime = LocalDateTime.now(),
 	@Column(name = "updated_at", nullable = false)
 	var updatedAt: LocalDateTime = LocalDateTime.now(),
-)
+	@Column(name = "sku", unique = true)
+	var sku: String? = null,
+	@Column(name = "rating", precision = 2, scale = 1)
+	var rating: BigDecimal? = null,
+	@Convert(converter = DangerLevelConverter::class)
+	@Column(name = "danger_level")
+	var dangerLevel: DangerLevel? = null,
+	/**
+	* Sizes stored as a JSON array string in the DB (e.g. '["US 6","US 7"]').
+	* Parsed to List<String> on read, serialized back to JSON string on write.
+	* Only applicable to footwear products, null for all other categories.
+	*/
+	@Column(name = "sizes", columnDefinition = "JSON")
+	var sizesJson: String? = null,
+) {
+    /**
+     * Parsed sizes list derived from the JSON column.
+     * Returns null if no sizes are defined for this product.
+     */
+    val sizes: List<String>?
+		get() = sizesJson?.let {
+			ObjectMapper().readValue(it, Array<String>::class.java)?.toList()
+		}
+}

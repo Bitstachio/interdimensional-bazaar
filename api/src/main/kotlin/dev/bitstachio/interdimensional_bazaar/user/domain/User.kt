@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.Convert
 import java.time.LocalDateTime
 import java.util.UUID
+import dev.bitstachio.interdimensional_bazaar.user.domain.UserRole
 
 @Entity
 @Table(name = "users")
@@ -25,4 +27,9 @@ class User(
 	var passwordHash: String = "",
 	@Column(name = "created_at", nullable = false, updatable = false)
 	var createdAt: LocalDateTime = LocalDateTime.now(),
+	@Convert(converter = UserRoleConverter::class)
+	@Column(nullable = false)
+	var role: UserRole = UserRole.CUSTOMER,
+	@Column(name = "phone")
+	var phone: String? = null,
 )

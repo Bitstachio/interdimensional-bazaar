@@ -12,4 +12,8 @@ data class ProductUpdateRequest(
 	val stockQuantity: Int,
 	val imageUrl: String?,
 	val isActive: Boolean,
+	val sku: String? = null,
+	val rating: java.math.BigDecimal? = null,
+	val dangerLevel: String? = null,
+	val sizes: List<String>? = null,
 )

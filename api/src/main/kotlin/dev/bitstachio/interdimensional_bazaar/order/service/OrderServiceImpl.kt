@@ -74,12 +74,14 @@ class OrderServiceImpl(
 		}
 		cart.items.clear()
 		cartRepository.save(cart)
-		return toResponse(orderRepository.findById(order.id!!).orElseThrow())
+		return toResponse(orderRepository.findByIdWithItems(order.id!!).orElseThrow {
+		OrderNotFoundException(order.id!!)
+		})
 	}
 
 	@Transactional(readOnly = true)
 	override fun getById(orderId: UUID): OrderResponse {
-		val order = orderRepository.findById(orderId).orElseThrow { OrderNotFoundException(orderId) }
+		val order = orderRepository.findByIdWithItems(orderId).orElseThrow { OrderNotFoundException(orderId) }
 		return toResponse(order)
 	}
 

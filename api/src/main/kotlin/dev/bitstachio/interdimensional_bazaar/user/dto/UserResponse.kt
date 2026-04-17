@@ -1,5 +1,6 @@
 package dev.bitstachio.interdimensional_bazaar.user.dto
 
+import dev.bitstachio.interdimensional_bazaar.user.domain.UserRole
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -9,4 +10,6 @@ data class UserResponse(
 	val lastName: String?,
 	val email: String,
 	val createdAt: LocalDateTime,
+	val role: UserRole,
+	val phone: String?,
 )

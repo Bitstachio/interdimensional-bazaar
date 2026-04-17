@@ -25,6 +25,8 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 				lastName = request.lastName,
 				email = request.email,
 				passwordHash = request.passwordHash,
+				role = request.role,
+				phone = request.phone,
 				createdAt = now,
 			)
 		return toResponse(userRepository.save(user))
@@ -47,6 +49,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 		user.lastName = request.lastName
 		user.email = request.email
 		user.passwordHash = request.passwordHash
+		user.phone = request.phone
 		return toResponse(userRepository.save(user))
 	}
 
@@ -64,6 +67,8 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 			lastName = user.lastName,
 			email = user.email,
 			createdAt = user.createdAt,
+			role = user.role,
+			phone = user.phone,
 		)
 	}
 }

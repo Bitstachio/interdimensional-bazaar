@@ -12,4 +12,8 @@ data class ProductCreateRequest(
 	val stockQuantity: Int,
 	val imageUrl: String?,
 	val isActive: Boolean = true,
+	val sku: String? = null,
+	val rating: BigDecimal? = null,
+	val dangerLevel: String? = null,
+	val sizes: List<String>? = null,
 )

@@ -67,36 +67,32 @@ class CartServiceImpl(
 	}
 
 	override fun getCartById(cartId: UUID): CartResponse {
-		val cart =
-			cartRepository.findById(cartId).orElseThrow {
-				CartNotFoundException("Cart not found: $cartId")
-			}
+		val cart = cartRepository.findByIdWithItems(cartId).orElseThrow {
+			CartNotFoundException("Cart not found: $cartId")
+		}
 		return toCartResponse(cart)
 	}
 
 	override fun addItemByCartId(cartId: UUID, request: AddCartItemRequest): CartResponse {
-		val cart =
-			cartRepository.findById(cartId).orElseThrow {
-				CartNotFoundException("Cart not found: $cartId")
-			}
+		val cart = cartRepository.findByIdWithItems(cartId).orElseThrow {
+			CartNotFoundException("Cart not found: $cartId")
+		}
 		addItemToCart(cart, request)
 		return toCartResponse(reloadCart(cartId))
 	}
 
 	override fun updateItemByCartId(cartId: UUID, itemId: Long, request: UpdateCartItemRequest): CartResponse {
-		val cart =
-			cartRepository.findById(cartId).orElseThrow {
-				CartNotFoundException("Cart not found: $cartId")
-			}
+		val cart = cartRepository.findByIdWithItems(cartId).orElseThrow {
+			CartNotFoundException("Cart not found: $cartId")
+		}
 		updateItemInCart(cart, itemId, request)
 		return toCartResponse(reloadCart(cartId))
 	}
 
 	override fun removeItemByCartId(cartId: UUID, itemId: Long): CartResponse {
-		val cart =
-			cartRepository.findById(cartId).orElseThrow {
-				CartNotFoundException("Cart not found: $cartId")
-			}
+		val cart = cartRepository.findByIdWithItems(cartId).orElseThrow {
+			CartNotFoundException("Cart not found: $cartId")
+		}
 		removeItemFromCart(cart, itemId)
 		return toCartResponse(reloadCart(cartId))
 	}
@@ -108,9 +104,10 @@ class CartServiceImpl(
 		}
 	}
 
-	private fun reloadCart(cartId: UUID): Cart {
-		return cartRepository.findById(cartId).orElseThrow()
-	}
+	private fun reloadCart(cartId: UUID): Cart =
+		cartRepository.findByIdWithItems(cartId).orElseThrow {
+			CartNotFoundException("Cart not found: $cartId")
+		}
 
 	private fun addItemToCart(cart: Cart, request: AddCartItemRequest) {
 		requireQuantity(request.quantity)

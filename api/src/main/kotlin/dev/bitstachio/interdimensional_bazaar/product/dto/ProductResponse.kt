@@ -17,4 +17,8 @@ data class ProductResponse(
 	val isActive: Boolean,
 	val createdAt: LocalDateTime,
 	val updatedAt: LocalDateTime,
+	val sku: String?,
+	val rating: java.math.BigDecimal?,
+	val dangerLevel: String?,
+	val sizes: List<String>?,
 )

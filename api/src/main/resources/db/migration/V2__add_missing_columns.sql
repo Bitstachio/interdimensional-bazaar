@@ -6,9 +6,9 @@ USE bazaar_db;
 -- Products
 
 ALTER TABLE products
-    ADD COLUMN sku          VARCHAR(20)                                                     UNIQUE NULL,
+    ADD COLUMN sku          VARCHAR(255)                                                     UNIQUE NULL,
     ADD COLUMN rating       DECIMAL(2, 1)                                                   DEFAULT 0 NULL,
-    ADD COLUMN danger_level ENUM ('Safe', 'Moderate', 'Dangerous', 'Extinction Class')      NULL,
+    ADD COLUMN danger_level VARCHAR(255)                                                    NULL,
     ADD COLUMN sizes        JSON                                                             NULL;
 
 -- Users

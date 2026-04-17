@@ -1,8 +1,10 @@
 package dev.bitstachio.interdimensional_bazaar.product.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import dev.bitstachio.interdimensional_bazaar.category.domain.Category
 import dev.bitstachio.interdimensional_bazaar.category.exception.CategoryNotFoundException
 import dev.bitstachio.interdimensional_bazaar.category.repository.CategoryRepository
+import dev.bitstachio.interdimensional_bazaar.product.domain.DangerLevel
 import dev.bitstachio.interdimensional_bazaar.product.domain.Product
 import dev.bitstachio.interdimensional_bazaar.product.dto.ProductCreateRequest
 import dev.bitstachio.interdimensional_bazaar.product.dto.ProductResponse
@@ -23,6 +25,8 @@ class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
 ) : ProductService {
+
+    private val objectMapper = ObjectMapper()
 
     @Transactional(readOnly = true)
     override fun list(
@@ -64,19 +68,22 @@ class ProductServiceImpl(
             throw ProductDuplicateSlugException(request.slug)
         }
         val now = LocalDateTime.now()
-        val product =
-            Product(
-                category = resolveCategory(request.categoryId),
-                name = request.name,
-                slug = request.slug,
-                description = request.description,
-                price = request.price,
-                stockQuantity = request.stockQuantity,
-                imageUrl = request.imageUrl,
-                isActive = request.isActive,
-                createdAt = now,
-                updatedAt = now,
-            )
+        val product = Product(
+            category = resolveCategory(request.categoryId),
+            name = request.name,
+            slug = request.slug,
+            description = request.description,
+            price = request.price,
+            stockQuantity = request.stockQuantity,
+            imageUrl = request.imageUrl,
+            isActive = request.isActive,
+            createdAt = now,
+            updatedAt = now,
+            sku = request.sku,
+            rating = request.rating,
+            dangerLevel = request.dangerLevel?.let { DangerLevel.fromDbValue(it) },
+            sizesJson = request.sizes?.let { objectMapper.writeValueAsString(it) },
+        )
         return toResponse(productRepository.save(product))
     }
 
@@ -93,6 +100,10 @@ class ProductServiceImpl(
         product.stockQuantity = request.stockQuantity
         product.imageUrl = request.imageUrl
         product.isActive = request.isActive
+        product.sku = request.sku
+        product.rating = request.rating
+        product.dangerLevel = request.dangerLevel?.let { DangerLevel.fromDbValue(it) }
+        product.sizesJson = request.sizes?.let { objectMapper.writeValueAsString(it) }
         product.updatedAt = LocalDateTime.now()
         return toResponse(productRepository.save(product))
     }
@@ -105,16 +116,14 @@ class ProductServiceImpl(
     }
 
     private fun resolveCategory(categoryId: UUID?): Category? {
-        if (categoryId == null) {
-            return null
-        }
+        if (categoryId == null) return null
         return categoryRepository.findById(categoryId).orElseThrow {
             CategoryNotFoundException(categoryId)
         }
     }
 
-    private fun toResponse(product: Product): ProductResponse {
-        return ProductResponse(
+    private fun toResponse(product: Product): ProductResponse =
+        ProductResponse(
             id = product.id!!,
             categoryId = product.category?.id,
             categoryName = product.category?.name,
@@ -125,8 +134,11 @@ class ProductServiceImpl(
             stockQuantity = product.stockQuantity,
             imageUrl = product.imageUrl,
             isActive = product.isActive,
+            sku = product.sku,
+            rating = product.rating,
+            dangerLevel = product.dangerLevel?.dbValue,
+            sizes = product.sizes,
             createdAt = product.createdAt,
             updatedAt = product.updatedAt,
         )
-    }
 }
