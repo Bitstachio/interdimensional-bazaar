@@ -1,6 +1,7 @@
-import Navbar from "@/components/layout/Navbar/Navbar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Providers } from "@/components/providers/Providers";
+import { Navbar } from "@/components/layout/Navbar/Navbar";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,19 +12,29 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bazaar",
+  /**
+   * e.g. a page exporting title "Cart" renders as "Cart | Bazaar"
+   */
+  title: {
+    template: "%s | Bazaar",
+    default: "Bazaar — Rick and Morty Interdimensional Shop",
+  },
   description: "A modern platform for online shopping",
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <html className="scroll-smooth" lang="en">
-      <body className={`${inter.variable} antialiased`}>
+type RootLayoutProps = {
+  children: React.ReactNode;
+};
+
+const RootLayout = ({ children }: RootLayoutProps) => (
+  <html lang="en" data-theme="dark" className="scroll-smooth">
+    <body className={`${inter.variable} antialiased`}>
+      <Providers>
         <Navbar />
         <main>{children}</main>
-      </body>
-    </html>
-  );
-};
+      </Providers>
+    </body>
+  </html>
+);
 
 export default RootLayout;
