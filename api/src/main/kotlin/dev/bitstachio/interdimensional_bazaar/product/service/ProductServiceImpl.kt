@@ -24,6 +24,7 @@ import java.util.UUID
 class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
+    private val reviewService: ReviewService,
 ) : ProductService {
 
     private val objectMapper = ObjectMapper()
@@ -140,5 +141,6 @@ class ProductServiceImpl(
             sizes = product.sizes,
             createdAt = product.createdAt,
             updatedAt = product.updatedAt,
+            reviews = reviewService.getReviewsForProduct(product.id!!),
         )
 }

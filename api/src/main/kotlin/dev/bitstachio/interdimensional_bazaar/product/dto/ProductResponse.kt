@@ -18,7 +18,8 @@ data class ProductResponse(
 	val createdAt: LocalDateTime,
 	val updatedAt: LocalDateTime,
 	val sku: String?,
-	val rating: java.math.BigDecimal?,
+	val rating: BigDecimal?,
 	val dangerLevel: String?,
 	val sizes: List<String>?,
+	val reviews: List<ReviewResponse> = emptyList(),
 )

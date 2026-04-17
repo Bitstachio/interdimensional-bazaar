@@ -18,10 +18,19 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import dev.bitstachio.interdimensional_bazaar.product.dto.ReviewCreateRequest
+import dev.bitstachio.interdimensional_bazaar.product.dto.ReviewResponse
+import dev.bitstachio.interdimensional_bazaar.product.service.ReviewService
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
+import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/api/products")
-class ProductController(private val productService: ProductService) {
+class ProductController(
+	private val productService: ProductService,
+	private val reviewService: ReviewService,
+) {
 
 	@GetMapping
 	fun list(
@@ -61,4 +70,11 @@ class ProductController(private val productService: ProductService) {
 	fun delete(@PathVariable id: UUID) {
 		productService.delete(id)
 	}
+
+	@PostMapping("/{id}/reviews")
+	@ResponseStatus(HttpStatus.CREATED)
+	fun createReview(
+		@PathVariable id: UUID,
+		@RequestBody @Valid request: ReviewCreateRequest,
+	): ReviewResponse = reviewService.createReview(id, request)
 }
