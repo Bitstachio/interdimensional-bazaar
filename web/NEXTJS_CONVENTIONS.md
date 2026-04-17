@@ -232,17 +232,17 @@ When adding a new feature (e.g., `checkout`):
 Run formatting before committing (adjust commands to match your `package.json` scripts):
 
 ```bash
-pnpm exec prettier --write .
+npx prettier --write .
 ```
 
 Check formatting without writing:
 
 ```bash
-pnpm exec prettier --check .
+npx prettier --check .
 ```
 
 If the repo uses ESLint with Next.js:
 
 ```bash
-pnpm exec eslint .
+npx eslint .
 ```
