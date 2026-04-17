@@ -1,9 +1,9 @@
-import { FC, SVGProps } from "react";
+import { ComponentProps } from "react";
 import { ICONS } from "./registry";
 
-export type TIcon = {
+export type IconEntry = {
   label: string;
-  svg: FC<SVGProps<SVGElement>>;
+  svg: React.ElementType;
 };
 
-export type TIconName = keyof typeof ICONS;
+export type IconName = keyof typeof ICONS;

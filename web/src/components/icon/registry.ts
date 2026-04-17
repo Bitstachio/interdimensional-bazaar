@@ -1,11 +1,36 @@
-import NextIcon from "@/assets/icons/nextjs.svg";
-import { TIcon } from "./types";
+import { IconEntry } from "./types";
+import {
+  StarIcon,
+  HeartIcon,
+  ShoppingCartIcon,
+  MagnifyingGlassIcon,
+  UserIcon,
+  TrashIcon,
+  ChevronDownIcon,
+  AdjustmentsHorizontalIcon,
+  BarsArrowDownIcon,
+  CheckCircleIcon,
+  PencilIcon,
+  XMarkIcon,
+  SunIcon,
+  MoonIcon,
+  ChatBubbleLeftIcon,
+} from "@heroicons/react/24/outline";
 
 export const ICONS = {
-  // TODO: Remove this placeholder after populating the registry
-  // `ICONS` must contain at least one entry for appropriate type inference
-  next: {
-    label: "Next.js",
-    svg: NextIcon,
-  },
-} satisfies Record<string, TIcon>;
+  star: { label: "Star", svg: StarIcon },
+  heart: { label: "Heart", svg: HeartIcon },
+  cart: { label: "Shopping Cart", svg: ShoppingCartIcon },
+  search: { label: "Search", svg: MagnifyingGlassIcon },
+  account: { label: "Account", svg: UserIcon },
+  trash: { label: "Trash", svg: TrashIcon },
+  "chevron-down": { label: "Chevron Down", svg: ChevronDownIcon },
+  filter: { label: "Filter", svg: AdjustmentsHorizontalIcon },
+  sort: { label: "Sort", svg: BarsArrowDownIcon },
+  check: { label: "Check", svg: CheckCircleIcon },
+  edit: { label: "Edit", svg: PencilIcon },
+  close: { label: "Close", svg: XMarkIcon },
+  sun: { label: "Sun", svg: SunIcon },
+  moon: { label: "Moon", svg: MoonIcon },
+  chat: { label: "Chat", svg: ChatBubbleLeftIcon },
+} satisfies Record<string, IconEntry>;

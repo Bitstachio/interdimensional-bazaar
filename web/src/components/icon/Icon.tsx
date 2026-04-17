@@ -1,14 +1,12 @@
 import { ICONS } from "./registry";
-import { TIconName } from "./types";
+import { IconName } from "./types";
 
-type TIconProps = {
-  name: TIconName;
+type IconProps = {
+  name: IconName;
   className?: string;
 };
 
-const Icon = ({ name, className }: TIconProps) => {
+export const Icon = ({ name, className }: IconProps) => {
   const Svg = ICONS[name].svg;
   return <Svg className={className} name={name} />;
 };
-
-export default Icon;

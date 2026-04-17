@@ -1,3 +1,3 @@
-export { default as Icon } from "./Icon";
-export type { TIcon, TIconName } from "./types";
+export { Icon } from "./Icon";
+export type { Icon, IconName } from "./types";
 export { ICONS } from "./registry";
