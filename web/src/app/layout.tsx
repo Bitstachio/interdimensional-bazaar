@@ -29,10 +29,8 @@ type RootLayoutProps = {
 const RootLayout = ({ children }: RootLayoutProps) => (
   <html lang="en" data-theme="dark" className="scroll-smooth">
     <body className={`${inter.variable} antialiased`}>
-      <Providers>
-        <Navbar />
-        <main>{children}</main>
-      </Providers>
+      <Navbar />
+      <main>{children}</main>
     </body>
   </html>
 );
