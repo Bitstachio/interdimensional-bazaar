@@ -6,10 +6,13 @@ import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/currency";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import useCatalog from "../hooks/useCatalog";
+import type { CatalogProduct } from "@/types/catalog";
+import { Category } from "../types";
 
 type CatalogViewProps = {
-  slug: string;
+  category: Category;
+  /** Loaded on the server — avoids client `fetch`, CORS, and exposing `NEXT_PUBLIC_API_BASE_URL` for this page. */
+  products: CatalogProduct[];
 };
 
 // TODO: Replace with actual filters from API
@@ -17,9 +20,9 @@ const PRICE_FILTERS = ["$0 - $75", "$76 - $150", "$151 - $250", "$251+"] as cons
 const REVIEW_FILTERS = ["4 stars & up", "3 stars & up", "2 stars & up"] as const;
 const AVAILABILITY_FILTERS = ["In Stock", "Out of Stock"] as const;
 
-const CatalogView = ({ slug }: CatalogViewProps) => {
+const CatalogView = ({ category, products }: CatalogViewProps) => {
   const [showFilters, setShowFilters] = useState(true);
-  const { label, products } = useCatalog(slug);
+  const label = category.name ?? "Catalog";
 
   return (
     <div className="bg-background text-foreground min-h-[calc(100vh-4rem)]">
@@ -28,7 +31,7 @@ const CatalogView = ({ slug }: CatalogViewProps) => {
           <p className="text-muted text-sm tracking-wide uppercase">Catalog</p>
           <h1 className="text-strong mt-1 text-3xl font-bold tracking-tight">{label}</h1>
           <p className="text-muted mt-2 max-w-2xl text-sm">
-            {products.length} item{products.length === 1 ? "" : "s"} in this category (mock data).
+            {products.length} item{products.length === 1 ? "" : "s"} in this category.
           </p>
         </header>
 
@@ -112,13 +115,16 @@ const CatalogView = ({ slug }: CatalogViewProps) => {
               {products.map((product) => (
                 <li key={product.id}>
                   <article className="border-border bg-elevated flex h-full flex-col overflow-hidden rounded-lg border">
-                    <Link href={ROUTES.PRODUCT(product.slug)} className="bg-surface relative block aspect-square">
+                    <Link
+                      href={ROUTES.PRODUCT(product.slug ?? "")}
+                      className="bg-surface relative block aspect-square"
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element -- external placeholder; avoids remotePatterns config */}
                       <img src={product.imageUrl} alt="" className="h-full w-full object-cover" />
                     </Link>
                     <div className="flex flex-1 flex-col p-4">
                       <div className="flex items-start justify-between gap-2">
-                        <Link href={ROUTES.PRODUCT(product.slug)} className="text-strong group">
+                        <Link href={ROUTES.PRODUCT(product.slug ?? "")} className="text-strong group">
                           <h2 className="group-hover:text-accent line-clamp-2 text-base font-semibold">
                             {product.name}
                           </h2>
@@ -133,10 +139,12 @@ const CatalogView = ({ slug }: CatalogViewProps) => {
                       </div>
                       <div className="text-muted mt-2 flex items-center gap-1 text-sm">
                         <Icon name="star" className="h-3.5 w-3.5" />
-                        <span>{product.rating.toFixed(1)}</span>
+                        <span>{(product.rating ?? 0).toFixed(1)}</span>
                       </div>
                       <p className="text-muted mt-1 text-xs">{product.categoryName}</p>
-                      <p className="text-strong mt-3 text-lg font-bold">{formatPrice(product.price)}</p>
+                      <p className="text-strong mt-3 text-lg font-bold">
+                        {formatPrice(product.price ?? 0)}
+                      </p>
                       <button
                         type="button"
                         className="border-border text-strong hover:border-accent hover:text-accent mt-4 w-full rounded-full border-2 py-2 text-sm font-semibold transition-colors"

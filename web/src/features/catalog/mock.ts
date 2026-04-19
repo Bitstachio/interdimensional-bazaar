@@ -1,3 +1,5 @@
+import type { PagedProductsResponse } from "@/types/catalog";
+
 export const mockCatalog = {
   content: [
     {
@@ -107,4 +109,4 @@ export const mockCatalog = {
     totalElements: 5,
     totalPages: 1,
   },
-};
+} satisfies PagedProductsResponse;
