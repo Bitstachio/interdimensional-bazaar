@@ -1,5 +1,6 @@
 import { getCategoryBySlug } from "@/features/catalog/api/catalog";
 import CatalogView from "@/features/catalog/components/CatalogView";
+import { withNextRouting } from "@/lib/routing";
 import type { Metadata } from "next";
 
 type CatalogCategoryPageProps = {
@@ -8,7 +9,7 @@ type CatalogCategoryPageProps = {
 
 export const generateMetadata = async ({ params }: CatalogCategoryPageProps): Promise<Metadata> => {
   const { categorySlug } = await params;
-  const category = await getCategoryBySlug(categorySlug);
+  const category = await withNextRouting(getCategoryBySlug(categorySlug));
 
   return {
     title: `${category.name} - Interdimensional Bazaar`,
