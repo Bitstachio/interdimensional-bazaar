@@ -19,6 +19,12 @@ export const ROUTES = {
   ABOUT: "/about",
 
   /**
+   * Category catalog (product listing for one category).
+   * @param categorySlug - URL slug derived from category name, e.g. `potions`.
+   */
+  CATALOG_CATEGORY: (categorySlug: string) => `/catalog/${categorySlug}`,
+
+  /**
    * Product detail page
    * @param id - The unique product identifier.
    * @example ROUTES.PRODUCT("portal-gun-v2")
