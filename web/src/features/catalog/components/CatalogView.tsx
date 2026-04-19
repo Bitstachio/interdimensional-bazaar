@@ -4,10 +4,9 @@ import { Icon } from "@/components/icon";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
 import { formatPrice } from "@/lib/utils/currency";
+import type { CatalogProduct, Category } from "@/types/catalog";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import type { CatalogProduct } from "@/types/catalog";
-import { Category } from "../types";
 
 type CatalogViewProps = {
   category: Category;
@@ -115,10 +114,7 @@ const CatalogView = ({ category, products }: CatalogViewProps) => {
               {products.map((product) => (
                 <li key={product.id}>
                   <article className="border-border bg-elevated flex h-full flex-col overflow-hidden rounded-lg border">
-                    <Link
-                      href={ROUTES.PRODUCT(product.slug ?? "")}
-                      className="bg-surface relative block aspect-square"
-                    >
+                    <Link href={ROUTES.PRODUCT(product.slug ?? "")} className="bg-surface relative block aspect-square">
                       {/* eslint-disable-next-line @next/next/no-img-element -- external placeholder; avoids remotePatterns config */}
                       <img src={product.imageUrl} alt="" className="h-full w-full object-cover" />
                     </Link>
@@ -142,9 +138,7 @@ const CatalogView = ({ category, products }: CatalogViewProps) => {
                         <span>{(product.rating ?? 0).toFixed(1)}</span>
                       </div>
                       <p className="text-muted mt-1 text-xs">{product.categoryName}</p>
-                      <p className="text-strong mt-3 text-lg font-bold">
-                        {formatPrice(product.price ?? 0)}
-                      </p>
+                      <p className="text-strong mt-3 text-lg font-bold">{formatPrice(product.price ?? 0)}</p>
                       <button
                         type="button"
                         className="border-border text-strong hover:border-accent hover:text-accent mt-4 w-full rounded-full border-2 py-2 text-sm font-semibold transition-colors"

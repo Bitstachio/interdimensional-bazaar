@@ -315,141 +315,141 @@ export interface components {
         UserUpdateRequest: {
             firstName?: string;
             lastName?: string;
-            email?: string;
-            passwordHash?: string;
+            email: string;
+            passwordHash: string;
             phone?: string;
         };
         UserResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             firstName?: string;
             lastName?: string;
-            email?: string;
+            email: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** @enum {string} */
-            role?: "CUSTOMER" | "ADMIN";
+            role: "CUSTOMER" | "ADMIN";
             phone?: string;
         };
         ProductUpdateRequest: {
             /** Format: uuid */
             categoryId?: string;
-            name?: string;
-            slug?: string;
+            name: string;
+            slug: string;
             description?: string;
-            price?: number;
+            price: number;
             /** Format: int32 */
-            stockQuantity?: number;
+            stockQuantity: number;
             imageUrl?: string;
+            isActive: boolean;
             sku?: string;
             rating?: number;
             dangerLevel?: string;
             sizes?: string[];
-            active?: boolean;
         };
         ProductResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: uuid */
             categoryId?: string;
             categoryName?: string;
-            name?: string;
-            slug?: string;
+            name: string;
+            slug: string;
             description?: string;
-            price?: number;
+            price: number;
             /** Format: int32 */
-            stockQuantity?: number;
+            stockQuantity: number;
             imageUrl?: string;
+            isActive: boolean;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
-            updatedAt?: string;
+            updatedAt: string;
             sku?: string;
             rating?: number;
             dangerLevel?: string;
             sizes?: string[];
-            reviews?: components["schemas"]["ReviewResponse"][];
-            active?: boolean;
+            reviews: components["schemas"]["ReviewResponse"][];
         };
         ReviewResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: uuid */
-            userId?: string;
+            userId: string;
             firstName?: string;
             lastName?: string;
             /** Format: int32 */
-            rating?: number;
+            rating: number;
             title?: string;
             body?: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
         };
         CategoryUpdateRequest: {
-            name?: string;
-            slug?: string;
+            name: string;
+            slug: string;
             description?: string;
         };
         CategoryResponse: {
             /** Format: uuid */
-            id?: string;
-            name?: string;
-            slug?: string;
+            id: string;
+            name: string;
+            slug: string;
             description?: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
         };
         UpdateCartItemRequest: {
             /** Format: int32 */
-            quantity?: number;
+            quantity: number;
         };
         CartLineResponse: {
             /** Format: int64 */
-            id?: number;
+            id: number;
             /** Format: uuid */
-            productId?: string;
+            productId: string;
             /** Format: int32 */
-            quantity?: number;
-            name?: string;
-            slug?: string;
-            unitPrice?: number;
+            quantity: number;
+            name: string;
+            slug: string;
+            unitPrice: number;
             imageUrl?: string;
-            lineTotal?: number;
+            lineTotal: number;
         };
         CartResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: uuid */
             userId?: string;
             /** Format: date-time */
-            createdAt?: string;
-            items?: components["schemas"]["CartLineResponse"][];
-            subtotal?: number;
+            createdAt: string;
+            items: components["schemas"]["CartLineResponse"][];
+            subtotal: number;
         };
         UserCreateRequest: {
             firstName?: string;
             lastName?: string;
-            email?: string;
-            passwordHash?: string;
+            email: string;
+            passwordHash: string;
             /** @enum {string} */
-            role?: "CUSTOMER" | "ADMIN";
+            role: "CUSTOMER" | "ADMIN";
             phone?: string;
         };
         ProductCreateRequest: {
             /** Format: uuid */
             categoryId?: string;
-            name?: string;
-            slug?: string;
+            name: string;
+            slug: string;
             description?: string;
-            price?: number;
+            price: number;
             /** Format: int32 */
-            stockQuantity?: number;
+            stockQuantity: number;
             imageUrl?: string;
+            isActive: boolean;
             sku?: string;
             rating?: number;
             dangerLevel?: string;
             sizes?: string[];
-            active?: boolean;
         };
         ReviewCreateRequest: {
             /** Format: uuid */
@@ -461,44 +461,44 @@ export interface components {
         };
         PlaceOrderRequest: {
             /** Format: uuid */
-            cartId?: string;
+            cartId: string;
         };
         OrderLineResponse: {
             /** Format: int64 */
-            id?: number;
+            id: number;
             /** Format: uuid */
-            productId?: string;
+            productId: string;
             /** Format: int32 */
-            quantity?: number;
-            unitPrice?: number;
-            productName?: string;
-            productSlug?: string;
-            lineTotal?: number;
+            quantity: number;
+            unitPrice: number;
+            productName: string;
+            productSlug: string;
+            lineTotal: number;
         };
         OrderResponse: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             /** Format: uuid */
             userId?: string;
             /** @enum {string} */
-            status?: "PENDING" | "CONFIRMED" | "CANCELLED";
-            totalAmount?: number;
+            status: "PENDING" | "CONFIRMED" | "CANCELLED";
+            totalAmount: number;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
-            updatedAt?: string;
-            items?: components["schemas"]["OrderLineResponse"][];
+            updatedAt: string;
+            items: components["schemas"]["OrderLineResponse"][];
         };
         CategoryCreateRequest: {
-            name?: string;
-            slug?: string;
+            name: string;
+            slug: string;
             description?: string;
         };
         AddCartItemRequest: {
             /** Format: uuid */
-            productId?: string;
+            productId: string;
             /** Format: int32 */
-            quantity?: number;
+            quantity: number;
         };
         Pageable: {
             /** Format: int32 */
